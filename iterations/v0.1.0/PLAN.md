@@ -5,8 +5,9 @@
 - **Started:** 2026-11-10
 - **Last updated:** 2026-11-10
 
-> Fasi 1–4 completate. In attesa dell'intervento dell'utente per la Fase 5
-> (push su GitHub, import e Publish in AI Studio).
+> Fasi 1–4 completate. Fase 5 in corso: repository pubblico
+> `francescopersico/gaist` creato e pushato; restano import in AI Studio,
+> verifica del secret e Publish.
 
 ## 1. Objective
 
@@ -244,11 +245,11 @@ chiavi; la logica di validazione/streaming è iniettabile per i test.
 
 ### Phase 5 — Import e pubblicazione in AI Studio (manuale)
 
-- **Status:** not-started
+- **Status:** in-progress
 - **Changes:** nessun file di codice; solo verifica e, se necessario,
   adattamenti richiesti dal runtime AI Studio.
 - **Tasks:**
-  - [ ] L'utente crea il repository GitHub e pusha `main`.
+  - [x] Repository GitHub pubblico creato e pushato su `main`.
   - [ ] L'utente apre AI Studio Build → **Add files (+)** → **Import from
         GitHub** e seleziona il repository.
   - [ ] Verificare che il secret `GEMINI_API_KEY` sia presente in **Settings →
@@ -262,6 +263,9 @@ chiavi; la logica di validazione/streaming è iniettabile per i test.
   - Messaggio reale dal vivo dopo la pubblicazione.
 - **Acceptance criteria:** app raggiungibile su URL pubblico AI Studio e chat
   funzionante con il secret gestito da AI Studio.
+- **Evidence (2026-11-10):** `gh repo create francescopersico/gaist --public
+  --source=. --remote=origin --push` → <https://github.com/francescopersico/gaist>,
+  branch `main` tracciato su `origin/main`, commit `d303536`.
 
 ## 7. Verification matrix
 

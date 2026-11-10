@@ -96,29 +96,16 @@ curl -sN -X POST http://localhost:3000/api/chat \
 La pubblicazione richiede il tuo account Google e GitHub: l'import e il
 **Publish** non possono essere automatizzati da questo repository.
 
-### 1. Crea il repository GitHub e pusha
+### 1. Repository GitHub
 
-Il repository locale è già inizializzato sul branch `main` con il commit
-dell'applicazione. Crea un repository **vuoto** su GitHub (privato o pubblico),
-poi collega il remote e pusha:
-
-```bash
-git remote add origin git@github.com:<tuo-utente>/<nome-repo>.git
-git push -u origin main
-```
-
-Se dopo l'import modifichi altri file:
+Il progetto è già pubblicato su
+<https://github.com/francescopersico/gaist> (branch `main`). Per modifiche
+future:
 
 ```bash
 git add .
 git commit -m "fix: descrizione della modifica"
 git push
-```
-
-In alternativa, per creare il repository e pushare in un solo comando:
-
-```bash
-gh repo create <nome-repo> --private --source=. --remote=origin --push
 ```
 
 ### 2. Importa in AI Studio
