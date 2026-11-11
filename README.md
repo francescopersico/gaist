@@ -41,6 +41,7 @@ Il file `.env` è ignorato da Git: non committare mai chiavi reali.
 | Comando | Cosa fa |
 | ------- | ------- |
 | `npm run dev` | Avvia Express con Vite in middleware mode su `localhost:3000`. |
+| `npm run dev:watch` | Come `dev`, ma riavvia il server a ogni modifica (solo locale interattivo). |
 | `npm run build` | Genera la build di produzione in `dist/`. |
 | `npm start` | Serve `dist/` e le API in modalità produzione. |
 | `npm run typecheck` | TypeScript in modalità `--noEmit`. |
@@ -137,6 +138,9 @@ Se la preview segnala errori di build, chiedi all'agente di AI Studio:
 ### Note sul runtime AI Studio
 
 - Il runtime è React + Node.js: la struttura del progetto è già compatibile.
+- `npm run dev` e `npm start` usano `tsx` **senza watch mode**, così non
+  dipendono da stdin o da un TTY interattivo (sandbox e container chiudono
+  spesso stdin con EOF). `npm run dev:watch` è solo per lo sviluppo locale.
 - La chiave è iniettata solo lato server come `GEMINI_API_KEY`; il provider la
   legge esplicitamente con fallback su `GOOGLE_GENERATIVE_AI_API_KEY`.
 - Se il runtime usasse una versione di Node precedente alla 22, `ai@7` non

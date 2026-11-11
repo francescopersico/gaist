@@ -3,7 +3,7 @@
 - **Status:** in-progress
 - **Scope type:** minor
 - **Started:** 2026-11-10
-- **Last updated:** 2026-11-10
+- **Last updated:** 2026-11-11
 
 > Fasi 1–4 completate. Fase 5 in corso: repository pubblico
 > `francescopersico/gaist` creato e pushato; restano import in AI Studio,
@@ -68,7 +68,7 @@ partire: l'iterazione parte da zero.
 | Streaming | `streamText` + `toUIMessageStream` + `pipeUIMessageStreamToResponse` | risposta non-streaming; SSE custom | Pattern ufficiale AI SDK per Express; compatibile con `useChat`. |
 | API key | `createGoogle({ apiKey })` con fallback `GEMINI_API_KEY` → `GOOGLE_GENERATIVE_AI_API_KEY` | solo `GOOGLE_GENERATIVE_AI_API_KEY` | AI Studio inietta il secret come `GEMINI_API_KEY`; il fallback permette lo sviluppo locale con la convenzione AI SDK. |
 | Modello | `gemini-3.8-flash`, override con `GEMINI_MODEL` | `gemini-4-argon` (flagship, più lento/costoso); `gemini-3.5-flash-lite` (minimo costo) | Modello Flash corrente indicato nella doc AI Studio e usato negli esempi ufficiali con AI SDK: buon compromesso latenza/qualità per una chat. |
-| Dev server | un solo processo/porta: Express + Vite in `middlewareMode` | Vite dev + proxy verso server separato; `concurrently` | Il runtime AI Studio espone una sola porta; un solo comando evita proxy e race condition. |
+| Dev server | un solo processo/porta: Express + Vite in `middlewareMode`; `dev` senza watch, `dev:watch` solo locale | Vite dev + proxy verso server separato; `concurrently`; `tsx watch` come `dev` | Il runtime AI Studio espone una sola porta e non è interattivo: `tsx watch` legge stdin e in sandbox/container può comportarsi in modo imprevedibile. `dev` resta avviabile sempre; il riavvio automatico è opt-in. |
 | Stile | CSS puro con design token, un solo foglio | Tailwind CSS + plugin | Meno dipendenze di build, meno superficie di rottura nell'import AI Studio; per una singola pagina non serve un framework CSS. |
 | Rendering risposte | testo semplice con `white-space: pre-wrap` | renderer Markdown (`react-markdown`) | Meno dipendenze e nessun rischio di HTML non sanificato; il system prompt chiede di evitare Markdown decorativo. |
 | Stop generazione | visibile solo durante `status === 'streaming'` | sempre durante `submitted`/`streaming` | Durante i test autonomi lo stop in fase `submitted` seguito da un nuovo invio faceva arrivare fuori ordine la risposta annullata. |
@@ -246,10 +246,12 @@ chiavi; la logica di validazione/streaming è iniettabile per i test.
 ### Phase 5 — Import e pubblicazione in AI Studio (manuale)
 
 - **Status:** in-progress
-- **Changes:** nessun file di codice; solo verifica e, se necessario,
-  adattamenti richiesti dal runtime AI Studio.
+- **Changes:** `package.json`, `README.md`: `dev` senza watch mode per i
+  runtime non interattivi; verifiche e adattamenti richiesti da AI Studio.
 - **Tasks:**
   - [x] Repository GitHub pubblico creato e pushato su `main`.
+  - [x] Rendere `dev`/`start` indipendenti da stdin e TTY (`tsx` senza watch);
+        `dev:watch` resta solo per lo sviluppo locale.
   - [ ] L'utente apre AI Studio Build → **Add files (+)** → **Import from
         GitHub** e seleziona il repository.
   - [ ] Verificare che il secret `GEMINI_API_KEY` sia presente in **Settings →
@@ -266,6 +268,10 @@ chiavi; la logica di validazione/streaming è iniettabile per i test.
 - **Evidence (2026-11-10):** `gh repo create francescopersico/gaist --public
   --source=. --remote=origin --push` → <https://github.com/francescopersico/gaist>,
   branch `main` tracciato su `origin/main`, commit `d303536`.
+- **Evidence (2026-11-11):** con `tsx 4.23.15`, `tsx watch server/index.ts` con
+  stdin da `/dev/null` e da pipe chiusa subito è rimasto vivo (nessuna uscita
+  osservata), ma `package.json` è stato comunque reso indipendente da stdin:
+  `dev` = `tsx server/index.ts`, `dev:watch` = `tsx watch server/index.ts`.
 
 ## 7. Verification matrix
 
