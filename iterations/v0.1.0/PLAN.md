@@ -71,6 +71,7 @@ partire: l'iterazione parte da zero.
 | Dev server | un solo processo/porta: Express + Vite in `middlewareMode`; `dev` senza watch, `dev:watch` solo locale | Vite dev + proxy verso server separato; `concurrently`; `tsx watch` come `dev` | Il runtime AI Studio espone una sola porta e non è interattivo: `tsx watch` legge stdin e in sandbox/container può comportarsi in modo imprevedibile. `dev` resta avviabile sempre; il riavvio automatico è opt-in. |
 | Stile | CSS puro con design token, un solo foglio | Tailwind CSS + plugin | Meno dipendenze di build, meno superficie di rottura nell'import AI Studio; per una singola pagina non serve un framework CSS. |
 | Rendering risposte | testo semplice con `white-space: pre-wrap` | renderer Markdown (`react-markdown`) | Meno dipendenze e nessun rischio di HTML non sanificato; il system prompt chiede di evitare Markdown decorativo. |
+| Manifest AI Studio | `metadata.json` con `majorCapabilities: ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]` | omettere il campo | Campo non documentato nella doc pubblica, ma presente in tutte le app generate da AI Studio che usano Gemini lato server: dichiara la capability e favorisce l'iniezione del secret `GEMINI_API_KEY`. |
 | Stop generazione | visibile solo durante `status === 'streaming'` | sempre durante `submitted`/`streaming` | Durante i test autonomi lo stop in fase `submitted` seguito da un nuovo invio faceva arrivare fuori ordine la risposta annullata. |
 | Test | Vitest + Supertest, handler con dipendenza di streaming iniettabile | Playwright E2E | Verifica rapida e deterministica senza chiamare Gemini; i test E2E richiedono rete e API key. |
 | Build server | `tsx` anche in produzione (`start`) | `tsc` separato + `node dist-server` | Node richiede ≥22 per `ai@7`; `tsx` evita problemi di estensioni ESM nel build del server ed è il runner suggerito dalla doc AI Studio. |
@@ -252,6 +253,8 @@ chiavi; la logica di validazione/streaming è iniettabile per i test.
   - [x] Repository GitHub pubblico creato e pushato su `main`.
   - [x] Rendere `dev`/`start` indipendenti da stdin e TTY (`tsx` senza watch);
         `dev:watch` resta solo per lo sviluppo locale.
+  - [x] Dichiarare in `metadata.json` la capability
+        `MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API`.
   - [ ] L'utente apre AI Studio Build → **Add files (+)** → **Import from
         GitHub** e seleziona il repository.
   - [ ] Verificare che il secret `GEMINI_API_KEY` sia presente in **Settings →
@@ -272,6 +275,8 @@ chiavi; la logica di validazione/streaming è iniettabile per i test.
   stdin da `/dev/null` e da pipe chiusa subito è rimasto vivo (nessuna uscita
   osservata), ma `package.json` è stato comunque reso indipendente da stdin:
   `dev` = `tsx server/index.ts`, `dev:watch` = `tsx watch server/index.ts`.
+  `metadata.json` ora dichiara `MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API`, come
+  nelle app generate da AI Studio che usano Gemini lato server.
 
 ## 7. Verification matrix
 

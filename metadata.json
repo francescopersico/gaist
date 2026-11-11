@@ -1,5 +1,6 @@
 {
   "name": "Gaist Chat",
   "description": "Chat a pagina singola con Google Gemini tramite AI SDK.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

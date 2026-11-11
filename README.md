@@ -52,7 +52,7 @@ Il file `.env` è ignorato da Git: non committare mai chiavi reali.
 
 ```
 index.html              entry Vite
-metadata.json           metadati per Google AI Studio
+metadata.json           manifest AI Studio (nome, permessi, capability Gemini server-side)
 server/
   index.ts              Express: dev Vite middleware / static in produzione
   chat.ts               POST /api/chat con AI SDK + Gemini
@@ -138,6 +138,10 @@ Se la preview segnala errori di build, chiedi all'agente di AI Studio:
 ### Note sul runtime AI Studio
 
 - Il runtime è React + Node.js: la struttura del progetto è già compatibile.
+- `metadata.json` dichiara `MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API`: è il
+  manifest usato dalle app AI Studio per indicare che Gemini viene chiamato
+  lato server. Il campo non è nella doc pubblica, ma è presente nelle app
+  generate da AI Studio.
 - `npm run dev` e `npm start` usano `tsx` **senza watch mode**, così non
   dipendono da stdin o da un TTY interattivo (sandbox e container chiudono
   spesso stdin con EOF). `npm run dev:watch` è solo per lo sviluppo locale.
